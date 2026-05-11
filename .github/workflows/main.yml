@@ -1,0 +1,111 @@
+name: Build
+
+on:
+  push:
+    branches: [main, experimental]
+
+  pull_request:
+    branches: [main, experimental]
+
+  workflow_dispatch:
+
+  workflow_call:
+    inputs:
+      tag_name:
+        description: "Release tag"
+        required: true
+        type: string
+
+jobs:
+
+# ===============================
+# LINUX BUILD
+# ===============================
+  buildLinux:
+    name: Build Linux
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Haxe
+        uses: krdlab/setup-haxe@master
+        with:
+          haxe-version: 4.3.4
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libvlc-dev libvlccore-dev
+
+          haxelib setup ~/haxelib
+          haxelib install hxcpp --quiet
+
+          chmod +x ./setup/unix.sh
+          ./setup/unix.sh
+
+      - name: Skip SScript setup mode
+        run: |
+          echo 'oy9:showMacroty8:loopCosti25y10:includeAllfg' >> ~/settings.cocoa
+
+      - name: Create Version File
+        run: echo "${{ inputs.tag_name }}" > VERSION
+
+      - name: Compile Linux
+        run: |
+          haxelib run lime build Project.xml linux \
+          --app-version="${{ inputs.tag_name }}" \
+          -D officialBuild
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linuxBuild
+          path: export/release/linux/bin
+
+
+# ===============================
+# WINDOWS BUILD
+# ===============================
+  buildWindows:
+    name: Build Windows
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Haxe
+        uses: krdlab/setup-haxe@master
+        with:
+          haxe-version: 4.3.4
+
+      - name: Install Dependencies
+        shell: cmd
+        run: |
+          haxelib setup C:\haxelib
+          haxelib install hxcpp --quiet
+          call setup\windows.bat
+
+      - name: Skip SScript setup mode
+        shell: cmd
+        run: |
+          echo oy9:showMacroty8:loopCosti25y10:includeAllfg >> %USERPROFILE%\settings.cocoa
+
+      - name: Create Version File
+        shell: cmd
+        run: echo ${{ inputs.tag_name }} > VERSION
+
+      - name: Compile Windows
+        shell: cmd
+        run: |
+          haxelib run lime build Project.xml windows ^
+          --app-version="${{ inputs.tag_name }}" ^
+          -D officialBuild
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windowsBuild
+          path: export/release/windows/bin
