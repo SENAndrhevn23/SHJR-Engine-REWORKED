@@ -14,7 +14,7 @@ class MainMenuState extends MusicBeatState
 	public static var psychEngineVersion:String = '1.0'; // This is also used for Discord RPC
 	public static var pSliceVersion:String = '2.1';
 	public static var funkinVersion:String = '0.5.1'; // Version of funkin' we are emulating
-	public static var shjrVersion:String = '0.0.1'; // SHJR version
+	public static var hrkVersion:String = '0.0.1'; // SHJR version
 	public static var curSelected:Int = 0;
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
@@ -101,23 +101,23 @@ class MainMenuState extends MusicBeatState
 		}
 
 		var padding:Float = 8;
-		var shjrVer:FlxText = new FlxText(padding, FlxG.height - 58 - padding, FlxG.width, "SHJR Engine REWORKED " + shjrVersion, 12);
+		var hrkVer:FlxText = new FlxText(padding, FlxG.height - 58 - padding, FlxG.width, "SHJR Engine REWORKED " + hrkVersion, 12);
 		var psychVer:FlxText = new FlxText(padding, FlxG.height - 38 - padding, FlxG.width, "Psych Engine " + psychEngineVersion, 12);
 		var fnfVer:FlxText = new FlxText(padding, FlxG.height - 18 - padding, FlxG.width, 'Friday Night Funkin\' v${funkinVersion} (P-slice ${pSliceVersion})', 12);
 
-		shjrVer.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		hrkVer.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		psychVer.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		fnfVer.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		
-		shjrVer.scrollFactor.set();
+		hrkVer.scrollFactor.set();
 		psychVer.scrollFactor.set();
 		fnfVer.scrollFactor.set();
 		
-		shjrVer.antialiasing = ClientPrefs.data.antialiasing;
+		hrkVer.antialiasing = ClientPrefs.data.antialiasing;
 		psychVer.antialiasing = ClientPrefs.data.antialiasing;
 		fnfVer.antialiasing = ClientPrefs.data.antialiasing;
 
-		add(shjrVer);
+		add(hrkVer);
 		add(psychVer);
 		add(fnfVer);
 	
